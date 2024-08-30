@@ -1,0 +1,23 @@
+package views
+
+templ Layout(title string) {
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title>{ title }</title>
+		</head>
+		<body>
+			@signUpForm()
+		</body>
+	</html>
+}
+
+templ signUpForm() {
+	<form action="/user" method="POST">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name"/>
+		<label for="email">Email:</label>
+		<input type="text" id="email" name="email"/>
+		<input type="submit" value="Submit"/>
+	</form>
+}

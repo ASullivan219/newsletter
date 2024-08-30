@@ -1,30 +1,23 @@
 package main
 
 import (
-	"github.com/asullivan219/newsletter/components"
-
-	"fmt"
 	"net/http"
+	"os"
 
-	"github.com/a-h/templ"
-)
+	"github.com/asullivan219/newsletter/internal/db"
+	"github.com/asullivan219/newsletter/internal/routes"
+	"github.com/asullivan219/newsletter/internal/server"
 
-const (
-	inProduction = false
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	godotenv.Load()
+	database := &db.Supabase{ApiUrl: os.Getenv("API_URL"), ServiceKey: os.Getenv("SERVICE_KEY")}
+	server := server.Server{Mux: http.NewServeMux(), Db: database, Port: "8070"}
+	userHandler := routes.UserHandler{Db: database}
 
-	renamedHandler := components.Hello()
-	http.Handle("/", templ.Handler(renamedHandler))
-	http.Handle("/asdf", templ.Handler(renamedHandler))
-
-	if !inProduction {
-		fmt.Println("Not production serving on port 8080:")
-		http.ListenAndServe(":8080", nil)
-	} else {
-		fmt.Println("Production server listening")
-		http.ListenAndServeTLS(":8080", "./certs/cert.pem", "./certs/privateKey.key", nil)
-	}
-
+	server.AddRoute("/", routes.Index())
+	server.AddRoute("/user", &userHandler)
+	server.Serve()
 }
