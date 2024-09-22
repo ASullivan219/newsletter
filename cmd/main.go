@@ -14,11 +14,9 @@ import (
 func main() {
 	godotenv.Load()
 	database := db.NewDb(os.Getenv("DB_FILE"))
-	server := server.Server{Mux: http.NewServeMux(), Db: database, Port: "8070"}
+	server := server.Server{Mux: http.NewServeMux(), Db: database, Port: "8080"}
 	subscriberHandler := routes.SubscriberHandler{Db: database}
-
 	server.AddRoute("/", routes.Index())
 	server.AddRoute("/subscriber", &subscriberHandler)
-
 	server.Serve()
 }

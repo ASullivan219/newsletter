@@ -1,0 +1,4 @@
+package email
+
+func SendEmail() {
+}

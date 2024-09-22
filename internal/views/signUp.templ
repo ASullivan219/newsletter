@@ -1,26 +1,27 @@
 package views
 
 templ Layout(title string) {
-<!DOCTYPE html>
-<html>
-
-<head>
-	<title>{ title }</title>
-</head>
-
-<body>
-	@signUpForm()
-</body>
-
-</html>
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title>{ title }</title>
+			<script src="https://cdn.tailwindcss.com"></script>
+		</head>
+		<body>
+			<div id="content" class="bg-blue-500 flex justify-center items-center h-screen">
+				<div class="bg-purple-500 w-full sm:w-1/2  lg:w-1/4">div in content </div>
+			</div>
+			@signUpForm()
+		</body>
+	</html>
 }
 
 templ signUpForm() {
-<form action="/subscriber" method="POST">
-	<label for="name">Name:</label>
-	<input type="text" id="name" name="name" />
-	<label for="email">Email:</label>
-	<input type="text" id="email" name="email" />
-	<input type="submit" value="Submit" />
-</form>
+	<form action="/subscriber" method="POST">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name"/>
+		<label for="email">Email:</label>
+		<input type="text" id="email" name="email"/>
+		<input type="submit" value="Submit"/>
+	</form>
 }
