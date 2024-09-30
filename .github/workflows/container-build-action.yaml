@@ -28,7 +28,7 @@ jobs:
         run: export $IMAGE_NAME_LOWER="${IMAGE_NAME_LOWER},,"
       -
         name: echo
-        runt: echo $IMAGE_NAME_LOWER
+        run: echo $IMAGE_NAME_LOWER
 
       - 
         name: Check out the repo
