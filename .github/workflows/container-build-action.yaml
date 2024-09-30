@@ -22,18 +22,13 @@ jobs:
     steps:
       - 
         name: create new var
-        run: export IMAGE_NAME_LOWER="${{ env.IMAGE_NAME }}"
-      -
-        name: lowercase var
-        run: export $IMAGE_NAME_LOWER="${IMAGE_NAME_LOWER},,"
+        run: export IMAGE_NAME_LOWER="$( echo ${{ env.IMAGE_NAME }} | tr '[:upper:]' '[:lower:]' )"
       -
         name: echo
         run: echo $IMAGE_NAME_LOWER
-
       - 
         name: Check out the repo
         uses: actions/checkout@v4
-
       - 
         name: Login to Github Container Registry
         uses: docker/login-action@v3
