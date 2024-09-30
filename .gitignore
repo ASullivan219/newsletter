@@ -1,3 +1,4 @@
 # Ignore the secrets directory
 **/*.env
 /resources/*
+/tmp/
