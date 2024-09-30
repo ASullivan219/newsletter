@@ -21,11 +21,15 @@ jobs:
 
     steps:
       - 
-        name: export Lowercase the Image name
-        run: export IMAGE_NAME_LOWER="${${{ env.IMAGE_NAME }},,}"
+        name: create new var
+        run: export IMAGE_NAME_LOWER="${{ env.IMAGE_NAME }}"
       -
-        name: Echo lowercase image name
-        run: echo $IMAGE_NAME_LOWER
+        name: lowercase var
+        run: export $IMAGE_NAME_LOWER="${IMAGE_NAME_LOWER},,"
+      -
+        name: echo
+        runt: echo $IMAGE_NAME_LOWER
+
       - 
         name: Check out the repo
         uses: actions/checkout@v4
