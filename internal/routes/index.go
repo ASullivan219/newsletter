@@ -49,15 +49,5 @@ func (h *UserHandler) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.Db.PutSubscriber(email, name)
-	if err != nil {
-		slog.Info(
-			"error writing to database",
-			slog.String("error", err.Error()),
-		)
-		w.Write([]byte("server error"))
-		return
-	}
-
 	w.Write([]byte("hello world"))
 }

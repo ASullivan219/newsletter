@@ -13,11 +13,10 @@ import (
 
 func main() {
 	godotenv.Load()
-	database := &db.Supabase{ApiUrl: os.Getenv("API_URL"), ServiceKey: os.Getenv("SERVICE_KEY")}
-	server := server.Server{Mux: http.NewServeMux(), Db: database, Port: "8070"}
-	userHandler := routes.UserHandler{Db: database}
-
+	database := db.NewDb(os.Getenv("DB_FILE"))
+	server := server.Server{Mux: http.NewServeMux(), Db: database, Port: "8080"}
+	subscriberHandler := routes.SubscriberHandler{Db: database}
 	server.AddRoute("/", routes.Index())
-	server.AddRoute("/user", &userHandler)
+	server.AddRoute("/subscriber", &subscriberHandler)
 	server.Serve()
 }
