@@ -23,6 +23,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.actor }}/newsletter:latest
+          tags: ghcr.io/asullivan219/newsletter:latest
 
 
