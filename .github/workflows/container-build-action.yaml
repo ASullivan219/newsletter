@@ -22,7 +22,7 @@ jobs:
     steps:
       - 
         name: create new var
-        run: export IMAGE_NAME_LOWER="$( echo ${{ env.IMAGE_NAME }} | tr '[:upper:]' '[:lower:]' )"
+        run: echo "IMAGE_NAME_LOWER=$(echo ${{ env.IMAGE_NAME }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
       -
         name: echo
         run: echo $IMAGE_NAME_LOWER
