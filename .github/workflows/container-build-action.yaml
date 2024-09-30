@@ -42,6 +42,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.REGISTRY }}/asullivan219/newsletter:latest, ${{ env.REGISTRY }}/asullivan219/newsletter:${{ env.RELEASE_TAG }}
+          tags: ${{ env.REGISTRY }}/${IMAGE_NAME_LOWER}:latest, ${{ env.REGISTRY }}/${IMAGE_NAME_LOWER}:${{ env.RELEASE_TAG }}
 
 
