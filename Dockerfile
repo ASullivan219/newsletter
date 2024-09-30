@@ -1,4 +1,5 @@
 FROM golang:1.21
+LABEL org.opencontainers.image.source=https://github.com/ASullivan219/newsletter
 
 
 # Copy Files to docker container /app
