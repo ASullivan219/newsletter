@@ -35,7 +35,8 @@ jobs:
           context: .
           push: true
           tags: 
-            - ghcr.io/asullivan219/newsletter:latest
-            - ghcr.io/asullivan219/newsletter:${{ env.RELEASE_TAG }}
+            - 
+              ghcr.io/asullivan219/newsletter:latest
+              ghcr.io/asullivan219/newsletter:${{ env.RELEASE_TAG }}
 
 
