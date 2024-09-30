@@ -1,9 +1,12 @@
-name: GitHub Actions Demo
-on: workflow_dispatch
+name: Build docker on release
+on: 
+  release:
+    types: [published]
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  RELEASE_TAG: ${{ github.event.release.tag_name }}
 
 jobs:
   Build-Docker:
@@ -31,6 +34,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/asullivan219/newsletter:latest
+          tags: 
+            - ghcr.io/asullivan219/newsletter:latest
+            - ghcr.io/asullivan219/newsletter:${{ env.RELEASE_TAG }}
 
 
