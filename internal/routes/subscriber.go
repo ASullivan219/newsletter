@@ -2,10 +2,12 @@ package routes
 
 import (
 	"errors"
+	"fmt"
 	"log/slog"
 	"net/http"
 
 	"github.com/asullivan219/newsletter/internal/db"
+	"github.com/asullivan219/newsletter/internal/views"
 )
 
 type SubscriberHandler struct {
@@ -43,28 +45,34 @@ func (h *SubscriberHandler) postSubscriber(w http.ResponseWriter, r *http.Reques
 	name := r.PostFormValue("name")
 	email := r.PostFormValue("email")
 
-	err := assertAllNotNil(name, email)
+	fmt.Println(name)
+	fmt.Println(email)
+	var nameErr string
+	var emailErr string
 
-	// Validate information sent is not nil
-	if err != nil {
-		slog.Error("nil value passed to function")
-		w.Write([]byte("Error couldnt subscribe"))
-		return
+	if name == "" {
+		nameErr = "Name blank"
 	}
 
-	// Validate form has no empty values
-	err = assertAllNotEmpty(name, email)
-	if err != nil {
-		slog.Error("empty string provided in form")
-		w.Write([]byte("Error couldnt subscribe"))
+	if email == "" {
+		emailErr = "Email blank"
+	}
+
+	if nameErr != "" || emailErr != "" {
+
+		errComponent := views.SignUpForm(name, nameErr, email, emailErr)
+		errComponent.Render(r.Context(), w)
 		return
 	}
 
 	// Place Subscriber in Database
-	err = h.Db.CreateSubscriber(email, name)
+	err := h.Db.CreateSubscriber(email, name)
 	if err != nil {
 		slog.Error("Error creating subscriber in DB")
-		w.Write([]byte("Error couldnt subscribe"))
+		emailErr = "Email Used already!"
+
+		errComponent := views.SignUpForm(name, nameErr, email, emailErr)
+		errComponent.Render(r.Context(), w)
 		return
 	}
 

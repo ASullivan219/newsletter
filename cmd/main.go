@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log/slog"
 	"net/http"
 	"os"
 
@@ -12,7 +13,14 @@ import (
 )
 
 func main() {
-	godotenv.Load()
+
+	err := godotenv.Load("./cmd/.env")
+	if err != nil {
+		slog.Error("Error loading .env file",
+			"error", err.Error(),
+		)
+	}
+	slog.Info(os.Getenv("DB_FILE"))
 	database := db.NewDb(os.Getenv("DB_FILE"))
 	server := server.Server{Mux: http.NewServeMux(), Db: database, Port: "8080"}
 	subscriberHandler := routes.SubscriberHandler{Db: database}
