@@ -1,56 +1,86 @@
 package views
 
 templ Layout(title string) {
-<!DOCTYPE html>
-<html>
-
-<head>
-	<title>{ title }</title>
-	<script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body>
-	<div id="content" class="flex justify-center items-center h-screen">
-		<div class="w-full sm:w-1/2  lg:w-1/4">
-			@signUpForm()
-		</div>
-	</div>
-</body>
-
-</html>
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title>{ title }</title>
+			<script src="https://cdn.tailwindcss.com"></script>
+			<script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous"></script>
+		</head>
+		<body class="bg-slate-100 dark:bg-slate-800">
+			@header()
+			<div id="content" class="flex justify-center items-center h-screen">
+				<div class="w-full sm:w-1/2  lg:w-1/4">
+					@SignUpForm("", "", "", "")
+				</div>
+			</div>
+			lightmode := ""
+		</body>
+	</html>
 }
 
-templ signUpForm() {
-<div class="w-full">
-	<form class="bg-white shadow-md rounded px-4 py-4">
+templ input(label string, value string, err string) {
+	<div class="flex justify-between">
+		<label class="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200">{ label }</label>
+		<div class="text-red-800 dark:text-pink-400">{ err }</div>
+	</div>
+	<input
+		value={ value }
+		id={ label }
+		name={ label }
+		class=" shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-2 dark:bg-slate-800 dark:border-slate-600 dark:text-gray-200"
+	/>
+}
+
+templ SignUpForm(name string, nameErr string, email string, emailErr string) {
+	<form
+		class="bg-white shadow-lg rounded-lg px-4 py-4  border dark:border-slate-900 dark:bg-slate-900 dark:text-gray-200"
+		hx-post="/subscriber"
+		hx-swap="outerHTML"
+	>
 		@formTitle()
-		<label class="block text-gray-700 text-sm font-bold mb-2">Name </label>
-		<input class=" shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-2" />
-		<label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-		<input class=" shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-2" type="email" />
-		<label class="block text-gray-700 text-sm font-bold mb-2">Relationship </label>
+		@input("name", name, nameErr)
+		@input("email", email, emailErr)
+		<label class="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200">Relationship </label>
 		<div class="flex ">
-			<select class="p-3 text-gray-700 bg-slate-50" name="relationship">
+			<select
+				name="relationship"
+				class="p-3 text-gray-700 bg-slate-50 dark:bg-slate-800 dark:text-gray-200"
+				name="relationship"
+			>
 				<option value="cew">CEW Crew</option>
-				<option value="friend">Friend</option>
+				<option value="Friend">Friend</option>
 				<option value="Acquaintance">Aquaintance</option>
 				<option value="Family">Family</option>
 				<option value="Enemy">Enemy</option>
 				<option value="other">Other</option>
 			</select>
-			<input class="w-full bg-slate-500 hover:bg-slate-300 ml-4 p-3 text-white font-bold rounded" type="submit"
-				value="submit" />
+			<input
+				id="sign-up-button"
+				class="w-full bg-slate-500 hover:bg-slate-300 ml-4 p-3 text-white font-bold rounded"
+				type="submit"
+				value="submit"
+			/>
 		</div>
 	</form>
-</div>
 }
 
 templ formTitle() {
-<div class="my-4">
-	<div class="block text-xl font-bold">Sign Up</div>
-	<div class="font-light pt-2">
-		Enter details below to sign-up. Dont worry, all of your information will be immediately sold to the highest
-		bidder.
+	<div class="my-4">
+		<div class="block text-xl font-bold">Sign Up</div>
+		<div class="font-light pt-2">
+			Enter details below to sign-up. Dont worry, all of your information will be immediately sold to the highest
+			bidder.
+		</div>
 	</div>
-</div>
+}
+
+templ header() {
+	<header class="w-full flex justify-center border-b bg-gray-200 p-4">
+		<div class="bg-blue-200 w-full md:w-[70rem] flex justify-between">
+			<div>Alex-sullivan.com</div>
+			<div>Alex-sullivan.com</div>
+		</div>
+	</header>
 }
