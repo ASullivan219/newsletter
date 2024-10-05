@@ -17,12 +17,10 @@ jobs:
       packages: write
 
     steps:
+      # Image names must be lower case to successfully push to GitHub Container Registry
       - 
-        name: create new var
+        name: Convert image name to lowercase
         run: echo "IMAGE_NAME_LOWER=$(echo ${{ env.IMAGE_NAME }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-      -
-        name: echo
-        run: echo $IMAGE_NAME_LOWER
       - 
         name: Check out the repo
         uses: actions/checkout@v4
