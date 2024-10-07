@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/asullivan219/newsletter/internal/db"
+	"github.com/asullivan219/newsletter/internal/models"
 )
 
 // Clean up function to clear the database between runs
@@ -75,7 +76,7 @@ func TestVerifyUser(t *testing.T) {
 	sqliteDb := db.NewDb("../resources/subscribers.db")
 	defer dropSubscribersTable(sqliteDb.Db)
 
-	newSubcriber := db.SubscriberModel{
+	newSubcriber := models.SubscriberModel{
 		Email:            "a.sullivan219@gmail.com",
 		Name:             "Alex Sullivan",
 		Verified:         false,
@@ -88,7 +89,7 @@ func TestVerifyUser(t *testing.T) {
 	)
 
 	newSubcriber, err := sqliteDb.VerifySubscriber(newSubcriber)
-	sub, _ := sqliteDb.GetSubscriber(newSubcriber.Email)
+	db_sub, _ := sqliteDb.GetSubscriber(newSubcriber.Email)
 
 	if err != nil {
 		t.Fatal("Error Verifying User", err.Error())
@@ -98,7 +99,37 @@ func TestVerifyUser(t *testing.T) {
 		t.Fatal("expected new subscriber to be verified")
 	}
 
-	if sub != newSubcriber {
-		t.Fatal("subscriber from database not equal to newSubscriber")
+	if db_sub.Email != newSubcriber.Email {
+		t.Fatalf("Email incorrected, expected %s got %s",
+			newSubcriber.Email, db_sub.Email,
+		)
 	}
+
+	if db_sub.Name != newSubcriber.Name {
+		t.Fatalf("Email incorrected, expected %s got %s",
+			newSubcriber.Name, db_sub.Name,
+		)
+	}
+}
+
+func TestGenerateCode(t *testing.T) {
+	sqliteDb := db.NewDb("../resources/subscribers.db")
+	defer dropSubscribersTable(sqliteDb.Db)
+
+	email := "a.sullivan@gmail.com"
+	name := "Alex"
+
+	sqliteDb.CreateSubscriber(email, name)
+	subscriber, err := sqliteDb.GetSubscriber(email)
+
+	if err != nil {
+		t.Fatalf("Error getting subscriber with email: %s", email)
+	}
+
+	if subscriber.VerificationCode == "" {
+		t.Fatal("Verification code empty")
+	}
+
+	t.Log(subscriber.VerificationCode)
+
 }

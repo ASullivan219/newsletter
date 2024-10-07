@@ -3,8 +3,10 @@ package db
 import (
 	"database/sql"
 	"errors"
-	"github.com/asullivan219/newsletter/internal/models"
 	"log/slog"
+	"math/rand"
+
+	"github.com/asullivan219/newsletter/internal/models"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -56,8 +58,14 @@ func subscriberExists(db *sql.DB, email string) bool {
 
 // Generate and return a new 8 character string to use as a
 // Verification code
+var runes = []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+
 func generateNewVerificationCode() string {
-	return "XXXXXXXX"
+	code := make([]rune, 8)
+	for i := range code {
+		code[i] = runes[rand.Intn(len(runes))]
+	}
+	return string(code)
 }
 
 // Put a new subscriber return an Error if the insert fails
