@@ -1,6 +1,12 @@
 # Newsletter
 
-Go, templ, tailwind, PostgreSQL project.
+Go, templ, tailwind, SQLite
+
+## TODO:
+
+-[ ] Implement Confirmation Email on subscribe
+-[ ] Confirm Email addresses with email package on sign up
+-[x] Generate random codes
 
 ## Run with Go locally
 
