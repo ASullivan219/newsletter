@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"os"
 
 	"github.com/asullivan219/newsletter/internal/db"
 	"github.com/asullivan219/newsletter/internal/emailer"
@@ -77,7 +78,12 @@ func (h *SubscriberHandler) postSubscriber(w http.ResponseWriter, r *http.Reques
 
 	subscriber, _ := h.Db.GetSubscriber(email)
 
-	validationLink := fmt.Sprintf("http://localhost:8080/validate?email=%s&code=%s", subscriber.Email, subscriber.VerificationCode)
+	validationLink := fmt.Sprintf(
+		"%s://%s/validate?email=%s&code=%s",
+		os.Getenv("PROTOCOL"),
+		os.Getenv("DOMAIN"),
+		subscriber.Email,
+		subscriber.VerificationCode)
 
 	templEmail := views.VerifySignupEmail(subscriber, validationLink)
 

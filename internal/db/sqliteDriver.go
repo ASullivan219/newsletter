@@ -26,6 +26,7 @@ func NewDb(filePath string) *SqliteDriver {
 		slog.Error("Error initializing database tables")
 		return nil
 	}
+
 	return sqlite
 }
 
