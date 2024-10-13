@@ -6,6 +6,8 @@ Go, templ, tailwind, SQLite
 
 -[ ] Implement Confirmation Email on subscribe
 -[ ] Confirm Email addresses with email package on sign up
+-[ ] Create a successful sign up component to return
+-[ ] Implement relationship feature in sign-up
 -[x] Generate random codes
 
 ## Run with Go locally

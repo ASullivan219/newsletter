@@ -1,6 +1,6 @@
 package views
 
-templ Layout(title string) {
+templ Layout(title string, content templ.Component) {
 	<!DOCTYPE html>
 	<html>
 		<head>
@@ -12,7 +12,7 @@ templ Layout(title string) {
 			@header()
 			<div id="content" class="flex justify-center items-center h-screen">
 				<div class="w-full sm:w-1/2  lg:w-1/4">
-					@SignUpForm("", "", "", "")
+					@content
 				</div>
 			</div>
 			lightmode := ""
@@ -40,8 +40,8 @@ templ SignUpForm(name string, nameErr string, email string, emailErr string) {
 		hx-swap="outerHTML"
 	>
 		@formTitle()
-		@input("name", name, nameErr)
-		@input("email", email, emailErr)
+		@input("Name", name, nameErr)
+		@input("Email", email, emailErr)
 		<label class="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200">Relationship </label>
 		<div class="flex ">
 			<select
