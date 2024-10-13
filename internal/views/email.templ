@@ -1,0 +1,18 @@
+package views
+
+import "github.com/asullivan219/newsletter/internal/models"
+
+templ VerifySignupEmail(sub models.SubscriberModel, validationLinl string) {
+	<html>
+		<head></head>
+		<body>
+			{ sub.Name }, thanks for subscribing
+			<div>
+				<a href={ templ.SafeURL(validationLinl) }>Click Here </a>to confirm subscription
+			</div>
+			<div>
+				- A Sullivan
+			</div>
+		</body>
+	</html>
+}

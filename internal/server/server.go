@@ -6,13 +6,15 @@ import (
 	"net/http"
 
 	"github.com/asullivan219/newsletter/internal/db"
+	"github.com/asullivan219/newsletter/internal/emailer"
 )
 
 // HTTP server
 type Server struct {
-	Mux  *http.ServeMux
-	Db   db.I_database
-	Port string
+	Mux          *http.ServeMux
+	Db           db.I_database
+	EmailService emailer.I_Notifier
+	Port         string
 }
 
 // Add a route for the given path and handler

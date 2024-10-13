@@ -1,24 +1,24 @@
 package routes
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"log/slog"
 	"net/http"
+	"os"
 
 	"github.com/asullivan219/newsletter/internal/db"
+	"github.com/asullivan219/newsletter/internal/emailer"
 	"github.com/asullivan219/newsletter/internal/views"
 )
 
 type SubscriberHandler struct {
-	Db db.I_database
+	Db          db.I_database
+	EmailClient emailer.I_Notifier
 }
 
 func (h *SubscriberHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
-	slog.Warn("New request to /subscribers",
-		"path", r.Method,
-	)
 	switch r.Method {
 	case http.MethodGet:
 		h.getSubscriber(w, r)
@@ -30,23 +30,14 @@ func (h *SubscriberHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *SubscriberHandler) getSubscriber(w http.ResponseWriter, r *http.Request) {
-
-	slog.Warn("url Info",
-		"url", r.URL.String(),
-		"opaque", r.URL.Opaque,
-		"scheme", r.URL.Scheme,
-	)
-
 	w.Write([]byte("Hello :)"))
 }
 
 func (h *SubscriberHandler) postSubscriber(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	name := r.PostFormValue("name")
-	email := r.PostFormValue("email")
+	name := r.PostFormValue("Name")
+	email := r.PostFormValue("Email")
 
-	fmt.Println(name)
-	fmt.Println(email)
 	var nameErr string
 	var emailErr string
 
@@ -54,12 +45,18 @@ func (h *SubscriberHandler) postSubscriber(w http.ResponseWriter, r *http.Reques
 		nameErr = "Name blank"
 	}
 
-	if email == "" {
-		emailErr = "Email blank"
+	if !emailer.ValidateEmail(email) {
+		emailErr = "Invalid Email"
+		if email == "" {
+			emailErr = "Email cant be blank"
+		}
 	}
 
 	if nameErr != "" || emailErr != "" {
-
+		slog.Error("Error in form",
+			"Name", name, "NameErr", nameErr,
+			"Email", email, "EmailErr", emailErr,
+		)
 		errComponent := views.SignUpForm(name, nameErr, email, emailErr)
 		errComponent.Render(r.Context(), w)
 		return
@@ -68,12 +65,46 @@ func (h *SubscriberHandler) postSubscriber(w http.ResponseWriter, r *http.Reques
 	// Place Subscriber in Database
 	err := h.Db.CreateSubscriber(email, name)
 	if err != nil {
-		slog.Error("Error creating subscriber in DB")
-		emailErr = "Email Used already!"
+		slog.Error(
+			"Error Creating subscriber",
+			"error", err.Error())
+
+		emailErr = "Email Taken!"
 
 		errComponent := views.SignUpForm(name, nameErr, email, emailErr)
 		errComponent.Render(r.Context(), w)
 		return
+	}
+
+	subscriber, _ := h.Db.GetSubscriber(email)
+
+	validationLink := fmt.Sprintf(
+		"%s://%s/validate?email=%s&code=%s",
+		os.Getenv("PROTOCOL"),
+		os.Getenv("DOMAIN"),
+		subscriber.Email,
+		subscriber.VerificationCode)
+
+	templEmail := views.VerifySignupEmail(subscriber, validationLink)
+
+	buffer := bytes.NewBuffer([]byte(""))
+	templEmail.Render(r.Context(), buffer)
+
+	message := fmt.Sprintf(
+		"Subject: alex-sullivan.com Newsletter - Verification\n"+
+			"MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"+
+			"%s", buffer.String())
+
+	err = h.EmailClient.NotifyOne(message, email)
+
+	if err != nil {
+
+		slog.Error(
+			"Error sending email to new subscriber",
+			"email", email,
+			"error", err.Error())
+		//TODO: We probably want to do db cleanup here and remove the user
+		// From the db
 	}
 
 	w.Write([]byte("Subscribed!"))

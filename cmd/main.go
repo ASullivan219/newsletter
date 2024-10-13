@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/asullivan219/newsletter/internal/db"
+	"github.com/asullivan219/newsletter/internal/emailer"
 	"github.com/asullivan219/newsletter/internal/routes"
 	"github.com/asullivan219/newsletter/internal/server"
 
@@ -15,16 +16,40 @@ import (
 func main() {
 
 	err := godotenv.Load("./cmd/.env")
+
 	if err != nil {
 		slog.Error("Error loading .env file",
 			"error", err.Error(),
 		)
 	}
-	slog.Info(os.Getenv("DB_FILE"))
-	database := db.NewDb(os.Getenv("DB_FILE"))
-	server := server.Server{Mux: http.NewServeMux(), Db: database, Port: "8080"}
-	subscriberHandler := routes.SubscriberHandler{Db: database}
+
+	emailClient := emailer.NewEmailNotifier(
+		os.Getenv("FROM_EMAIL"),
+		os.Getenv("EMAIL_PASSWORD"),
+		os.Getenv("EMAIL_HOST"),
+		os.Getenv("EMAIL_PORT"))
+
+	database := db.NewDb(
+		os.Getenv("DB_FILE"))
+
+	server := server.Server{
+		Mux:          http.NewServeMux(),
+		Db:           database,
+		EmailService: emailClient,
+		Port:         "8080"}
+
+	subscriberHandler := routes.SubscriberHandler{
+		Db:          database,
+		EmailClient: emailClient,
+	}
+
+	validateHandler := routes.ValidateHandler{
+		Db:          database,
+		EmailClient: emailClient,
+	}
+
 	server.AddRoute("/", routes.Index())
 	server.AddRoute("/subscriber", &subscriberHandler)
+	server.AddRoute("/validate", &validateHandler)
 	server.Serve()
 }
