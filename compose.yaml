@@ -1,0 +1,11 @@
+
+# Sample docker compose
+services:
+  web:
+    image: newsletter:latest
+    volumes:
+      - type: bind
+        source: ./resources
+        target: /app/resources
+    ports:
+      - 8080:8080

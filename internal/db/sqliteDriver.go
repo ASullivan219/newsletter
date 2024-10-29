@@ -22,8 +22,11 @@ func NewDb(filePath string) *SqliteDriver {
 	sqlite := &SqliteDriver{
 		Db: db,
 	}
-	if sqlite.initializeTables() != nil {
-		slog.Error("Error initializing database tables")
+
+	if err = sqlite.initializeTables(); err != nil {
+		slog.Error("Error initializing database tables",
+			"error", err.Error(),
+		)
 		return nil
 	}
 

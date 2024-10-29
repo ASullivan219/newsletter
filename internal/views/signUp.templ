@@ -8,6 +8,7 @@ BG_PRIMARY = "bg-slate-100 dark:bg-slate-800"
 BG_SECONDARY = "bg-white dark:bg-slate-900"
 BG_GRADIENT_ACCENT = `bg-gradient-to-r from-indigo-600 to-fuchsia-300 hover:bg-gradient-to-r from-indigo-500
 to-fuchsia-200`
+BORDER_COLOR_DARK = "dark:border-gray-700"
 )
 
 templ Layout(title string, content templ.Component) {
@@ -66,9 +67,9 @@ templ SignUpForm(name string, nameErr string, email string, emailErr string) {
 }
 
 templ SignUpResponse() {
-<div class="m-4 p-5 rounded-lg text-center dark:text-gray-200 dark:bg-slate-900">
-	<div class="font-bold">Thank you for signing up</div>
-	<div class="pt-4">Expect a confirmation email within 2-4 business weeks</div>
+<div class={ "m-4 p-5 rounded-lg text-center" , BG_SECONDARY }>
+	<div class={ "font-bold" , TEXT_ACCENT }>Thank you for signing up</div>
+	<div class={ "pt-4" , TEXT_PRIMARY }>Expect a confirmation email within 2-4 business weeks</div>
 </div>
 }
 
@@ -82,7 +83,7 @@ templ formTitle() {
 }
 
 templ header() {
-<header class="w-full flex justify-center border-b p-4 dark:border-gray-700 dark:bg-slate-900">
+<header class={ "w-full flex justify-center border-b p-4" , BORDER_COLOR_DARK, BG_SECONDARY, TEXT_ACCENT }>
 	<div class="w-full md:w-[70rem] flex justify-between">
 		<div class={ "font-bold" , TEXT_ACCENT }>Alex-sullivan.com</div>
 	</div>

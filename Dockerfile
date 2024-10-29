@@ -1,4 +1,4 @@
-FROM golang:1.21
+FROM golang:1.21 as builder
 LABEL org.opencontainers.image.source=https://github.com/ASullivan219/newsletter
 
 
@@ -14,6 +14,16 @@ RUN go mod download
 WORKDIR /app/cmd
 RUN go build -o .
 EXPOSE 8080
-CMD ["./cmd"]
+
+# WORKDIR /app
+# CMD ["./cmd/cmd"]
+
+FROM golang:1.21
+
+COPY --from=builder /app/cmd /app/cmd
+
+WORKDIR /app
+CMD ["./cmd/cmd"]
+
 
 

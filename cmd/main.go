@@ -36,7 +36,7 @@ func main() {
 		Mux:          http.NewServeMux(),
 		Db:           database,
 		EmailService: emailClient,
-		Port:         "8080"}
+		Port:         os.Getenv("PORT")}
 
 	subscriberHandler := routes.SubscriberHandler{
 		Db:          database,
