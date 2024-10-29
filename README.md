@@ -12,6 +12,8 @@ Go, templ, tailwind, SQLite
 -[X] Delete components folder  
 -[X] Create representative docker compose file  
 -[ ] Create 0.0.1 release and pull image to vps
+-[ ] Install tailwind and build styles locally to move away from cdn
+-[ ] Host and serve htmx javascript from static folder to move away from cdn
 
 ## Run with Go locally
 
@@ -25,6 +27,12 @@ Go, templ, tailwind, SQLite
 
 ## Develop
 
+- Install go templ  
+    - `go install github.com/a-h/templ/cmd/templ@latest`
+    - `https://templ.guide/quick-start/installation`  
+- Install air for live re load  
+    - `go install github.com/air-verse/air@latest`  
+    - `https://github.com/air-verse/air`
 - Run command `air` from the project root.
 
 
