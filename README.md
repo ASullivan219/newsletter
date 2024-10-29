@@ -11,9 +11,9 @@ Go, templ, tailwind, SQLite
 -[X] Generate random codes  
 -[X] Delete components folder  
 -[X] Create representative docker compose file  
--[ ] Create 0.0.1 release and pull image to vps
--[ ] Install tailwind and build styles locally to move away from cdn
--[ ] Host and serve htmx javascript from static folder to move away from cdn
+-[ ] Create 0.0.1 release and pull image to vps  
+-[ ] Install tailwind and build styles locally to move away from cdn  
+-[ ] Host and serve htmx javascript from static folder to move away from cdn  
 
 ## Run with Go locally
 
@@ -33,6 +33,10 @@ Go, templ, tailwind, SQLite
 - Install air for live re load  
     - `go install github.com/air-verse/air@latest`  
     - `https://github.com/air-verse/air`
-- Run command `air` from the project root.
+- Make a resources folder in project root, and `subscribers.db` file within.
+    - `mkdir resources`  
+    - `touch resources/subscribers.db`  
+- Run command `air` from the project root.  
+- relevant files will be watched by air, start devloping locally and project will be rebuilt automatically on save.  
 
 
