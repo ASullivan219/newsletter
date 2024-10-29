@@ -3,6 +3,7 @@ package server
 
 import (
 	"fmt"
+	"log/slog"
 	"net/http"
 
 	"github.com/asullivan219/newsletter/internal/db"
@@ -24,7 +25,9 @@ func (s *Server) AddRoute(path string, handler http.Handler) {
 
 // Start service on the provided port
 func (s *Server) Serve() {
-	fmt.Printf("Serving on port %s", s.Port)
+	slog.Info("Now Serving",
+		"port", s.Port,
+	)
 	serveString := fmt.Sprintf(":%s", s.Port)
 	http.ListenAndServe(serveString, s.Mux)
 }

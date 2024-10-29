@@ -4,11 +4,13 @@ Go, templ, tailwind, SQLite
 
 ## TODO:
 
--[ ] Implement Confirmation Email on subscribe
--[ ] Confirm Email addresses with email package on sign up
--[ ] Create a successful sign up component to return
+-[x] Implement Confirmation Email on subscribe
+-[x] Validate Email addresses with email package on sign up
+-[X] Create a successful sign up component to return
 -[ ] Implement relationship feature in sign-up
 -[x] Generate random codes
+-[ ] Delete components folder
+-[ ] Create representative docker compose file
 
 ## Run with Go locally
 

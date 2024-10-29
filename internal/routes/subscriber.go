@@ -95,19 +95,9 @@ func (h *SubscriberHandler) postSubscriber(w http.ResponseWriter, r *http.Reques
 			"MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"+
 			"%s", buffer.String())
 
-	err = h.EmailClient.NotifyOne(message, email)
-
-	if err != nil {
-
-		slog.Error(
-			"Error sending email to new subscriber",
-			"email", email,
-			"error", err.Error())
-		//TODO: We probably want to do db cleanup here and remove the user
-		// From the db
-	}
-
-	w.Write([]byte("Subscribed!"))
+	go h.EmailClient.NotifyOne(message, email)
+	component := views.SignUpResponse()
+	component.Render(r.Context(), w)
 }
 
 func assertAllNotEmpty(T ...string) error {

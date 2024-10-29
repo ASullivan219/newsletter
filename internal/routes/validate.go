@@ -60,7 +60,6 @@ func (v *ValidateHandler) validate(w http.ResponseWriter, r *http.Request) {
 		errorComponent.Render(r.Context(), w)
 		return
 	}
-
 	layout := generatePage("Subscription Confirmed!")
 	layout.Render(r.Context(), w)
 	return
