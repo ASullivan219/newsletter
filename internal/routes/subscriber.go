@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/asullivan219/newsletter/internal/db"
 	"github.com/asullivan219/newsletter/internal/emailer"
@@ -38,6 +39,12 @@ func (h *SubscriberHandler) postSubscriber(w http.ResponseWriter, r *http.Reques
 	name := r.PostFormValue("Name")
 	email := r.PostFormValue("Email")
 
+	relationship, err := strconv.Atoi(r.PostFormValue("Relationship"))
+	if err != nil {
+		slog.Error("Error converting relationship to number")
+		return
+	}
+
 	var nameErr string
 	var emailErr string
 
@@ -63,7 +70,7 @@ func (h *SubscriberHandler) postSubscriber(w http.ResponseWriter, r *http.Reques
 	}
 
 	// Place Subscriber in Database
-	err := h.Db.CreateSubscriber(email, name)
+	err = h.Db.CreateSubscriber(email, name, relationship)
 	if err != nil {
 		slog.Error(
 			"Error Creating subscriber",

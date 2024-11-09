@@ -8,7 +8,7 @@ type I_database interface {
 	InitializeTables() error
 	GetSubscriber(string) (models.SubscriberModel, error)
 	PutSubscriber(models.SubscriberModel) error
-	CreateSubscriber(string, string) error
+	CreateSubscriber(string, string, int) error
 	VerifySubscriber(models.SubscriberModel) (models.SubscriberModel, error)
 	DropSubscribers() error
 }

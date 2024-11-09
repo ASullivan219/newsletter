@@ -40,7 +40,8 @@ func (db *SqliteDriver) InitializeTables() error {
 		email VARCHAR(255) NOT NULL PRIMARY KEY,
 		name VARCHAR(255) NOT NULL,
 		verified BOOLEAN,
-		verfification_code CHARACTER(10) 
+		verfification_code CHARACTER(10),
+		relationship INTEGER NOT NULL
 	)`
 	if _, err := db.Db.Exec(schema); err != nil {
 		return err
@@ -49,13 +50,8 @@ func (db *SqliteDriver) InitializeTables() error {
 }
 
 // We wont really need to up
-func (db *SqliteDriver) CreateSubscriber(email string, name string) error {
-	newSubscriber := models.SubscriberModel{
-		Email:    email,
-		Name:     name,
-		Verified: false,
-	}
-
+func (db *SqliteDriver) CreateSubscriber(email string, name string, relationship int) error {
+	newSubscriber := models.BrandNewSubscriber(email, name, relationship)
 	return createSubscriber(db.Db, newSubscriber)
 }
 
@@ -93,7 +89,7 @@ func (db *SqliteDriver) VerifySubscriber(model models.SubscriberModel) (models.S
 }
 
 func (db *SqliteDriver) PutSubscriber(model models.SubscriberModel) error {
-	return upsertSubscriber(db.Db, model.Email, model.Name, model.Verified)
+	return upsertSubscriber(db.Db, model.Email, model.Name, model.Verified, model.Relationship)
 }
 
 func (db *SqliteDriver) DropSubscribers() error {
@@ -105,6 +101,8 @@ func (db *SqliteDriver) DropSubscribers() error {
 		)
 		return err
 	}
+
+	slog.Info("Dropped subscriber table")
 
 	return nil
 }

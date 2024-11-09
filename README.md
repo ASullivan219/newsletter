@@ -7,13 +7,14 @@ Go, templ, tailwind, SQLite
 -[X] Implement Confirmation Email on subscribe  
 -[X] Validate Email addresses with email package on sign up  
 -[X] Create a successful sign up component to return  
--[ ] Implement relationship feature in sign-up  
+-[X] Implement relationship feature in sign-up  
 -[X] Generate random codes  
 -[X] Delete components folder  
 -[X] Create representative docker compose file  
--[ ] Create 0.0.1 release and pull image to vps  
+-[X] Create 0.0.1 release and pull image to vps  
 -[ ] Install tailwind and build styles locally to move away from cdn  
 -[ ] Host and serve htmx javascript from static folder to move away from cdn  
+-[ ] Make the verified field a timestamp rather than a boolean
 
 ## Run with Go locally
 
