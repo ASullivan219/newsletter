@@ -56,6 +56,6 @@ func (e *emailNotifier) NotifyOne(message string, email string) error {
 	slog.Info(
 		"Email successfully sent",
 		slog.String("email", email),
-		slog.String("message", message))
+	)
 	return nil
 }

@@ -95,6 +95,10 @@ func (h *SubscriberHandler) postSubscriber(w http.ResponseWriter, r *http.Reques
 			"MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"+
 			"%s", buffer.String())
 
+	slog.Info(
+		"Sending signup email",
+		"email", email)
+
 	go h.EmailClient.NotifyOne(message, email)
 	component := views.SignUpResponse()
 	component.Render(r.Context(), w)

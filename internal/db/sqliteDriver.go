@@ -23,7 +23,7 @@ func NewDb(filePath string) *SqliteDriver {
 		Db: db,
 	}
 
-	if err = sqlite.initializeTables(); err != nil {
+	if err = sqlite.InitializeTables(); err != nil {
 		slog.Error("Error initializing database tables",
 			"error", err.Error(),
 		)
@@ -34,7 +34,7 @@ func NewDb(filePath string) *SqliteDriver {
 }
 
 // Create the subscriber table if it does not already exist
-func (db *SqliteDriver) initializeTables() error {
+func (db *SqliteDriver) InitializeTables() error {
 	const schema string = `
 		CREATE TABLE IF NOT EXISTS subscribers (
 		email VARCHAR(255) NOT NULL PRIMARY KEY,
@@ -94,4 +94,17 @@ func (db *SqliteDriver) VerifySubscriber(model models.SubscriberModel) (models.S
 
 func (db *SqliteDriver) PutSubscriber(model models.SubscriberModel) error {
 	return upsertSubscriber(db.Db, model.Email, model.Name, model.Verified)
+}
+
+func (db *SqliteDriver) DropSubscribers() error {
+	_, err := db.Db.Exec("DROP TABLE IF EXISTS subscribers;")
+
+	if err != nil {
+		slog.Error("Could not drop table",
+			"error", err,
+		)
+		return err
+	}
+
+	return nil
 }

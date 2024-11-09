@@ -48,6 +48,14 @@ func main() {
 		EmailClient: emailClient,
 	}
 
+	if os.Getenv("DROP_ENABLED") == "true" {
+		slog.Info("Drop tables enabled, adding routes")
+		dropHandler := routes.DropHandler{
+			Db: database,
+		}
+		server.AddRoute("/drop", &dropHandler)
+	}
+
 	server.AddRoute("/", routes.Index())
 	server.AddRoute("/subscriber", &subscriberHandler)
 	server.AddRoute("/validate", &validateHandler)
